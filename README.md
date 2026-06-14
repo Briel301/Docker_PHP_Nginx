@@ -10,43 +10,47 @@ PHP-FPM es el interprete del lenguaje, Nginx ahora puede entender, procesar y mo
 Base de datos SQL de codigo abierto
 ## Prerrequisitos y Dependencias
 Se asume que docker ya esta instalado al momento de realizar el levantamiento de este entorno.
-En caso no este instalado visitar: https://docs.docker.com/engine/install/
+En caso no este instalado visitar: `https://docs.docker.com/engine/install/`
 ## Gestión de Seguridad (Variables de Entorno)
 Evitando exponer credenciales o codigo sensible, se utiliza un archivo .env el cual contiene las credenciales de acceso a la base de datos.
 Este archivo esta protegido detras de un .gitignore, guardando unicamente de forma local las credenciales, protegiendo de cualquier filtrado accidental de estas.
 ## 📦 Instrucciones de Despliegue Rápido
 ### 1. Clonar el repositorio y preparar los archivos
-`git clone https://github.com/Briel301/Docker_PHP_Nginx`
+```git clone https://github.com/Briel301/Docker_PHP_Nginx```
 ### 2. Configurar las variables locales (.env)
 crear un archivo .env con las credenciales necesarias, plantilla recomendada, mas no obligatoria:
-`# Configuración de la Base de Datos
+```
+# Configuración de la Base de Datos
 MariadbRootPassword=
 MariadbDatabase=
 MariadbUser=
-MariadbPassword=`
-`# Configuración para despliegue de errores
-AppEnvironment=Development `
+MariadbPassword=
+# Configuración para despliegue de errores
+AppEnvironment=Development
+```
 
 ### 3. Levantar los servicios con Docker Compose
-`sudo docker compose up -d`
+``` sudo docker compose up -d ```
 ## Ciclo de Vida de la Base de Datos y Persistencia
 El guardado de la base de datos se hace en local y no dentro del contenedor docker, si bien, esto es perfecto por la persistencia de datos, al momento de realizar cambios en el docker-compose.yml en la seccion "db", por seguridad, estos cambios no se aplicaran, asi que si se necesita cambiar las credenciales, podemos seguir estos dos escenarios:
 ### Escenario 1: Reinicialización Completa (Realizar solo en entorno de Desarrollo)
 Cuando la base de datos aun esta vacia o con datos placeholder, lo mas rapido es realizar un 
-`sudo docker compose down -v `
+``` sudo docker compose down -v ```
 y seguidamente eliminar la carpeta "mariadb_data".
 esto nos da un entorno limpio y al iniciar nuevamente docker con 
-`sudo docker compose up -d`
+``` sudo docker compose up -d ```
 la carpeta se creara nuevamente con nuestras nuevas credenciales
 ### Escenario 2: Actualización de Credenciales en produccion(usando CLI de MariaDB)
 Si ya se encuentra el produccion el codigo, o ya hay datos en la DB que no puedan ser eliminados, lo mejor es realizar estos cambios directamente desde CLI con MariaDB
 
 Ingresamos a la terminal interactiva con
-    ` docker exec -it 'MariadbContainer' mariadb -u root -p `
+``` docker exec -it 'MariadbContainer' mariadb -u root -p ```
 Una vez adentro (nos pide la contraseña del usuario root) ejecutamos el cambio de contraseña con SQL
-`ALTER USER 'usuario'@'localhost' IDENTIFIED BY 'NuevaContraseña';
+```
+ALTER USER 'usuario'@'localhost' IDENTIFIED BY 'NuevaContraseña';
 FLUSH PRIVILEGES;
-EXIT;`
+EXIT;
+``` 
 ## Diagnóstico y Resolución de Problemas (Troubleshooting / Lecciones Aprendidas)
 ### 1. Error: `Fatal error: Uncaught Error: Call to undefined function mysqli_connect()`
 Mi error: Al intentar cargar la página web, PHP lanza un error crítico indicando que no reconoce la función de conexión a la base de datos.
