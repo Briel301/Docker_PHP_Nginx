@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Despliegue de Entorno Web Local con Nginx, PHP y MariaDB usando Docker
 ## Descripción del Proyecto
     Levantamiento de un entorno local para PHP con base de datos
