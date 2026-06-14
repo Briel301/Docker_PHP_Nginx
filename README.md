@@ -53,9 +53,12 @@ EXIT;
 ``` 
 ## Diagnóstico y Resolución de Problemas (Troubleshooting / Lecciones Aprendidas)
 ### 1. Error: `Fatal error: Uncaught Error: Call to undefined function mysqli_connect()`
-Mi error: Al intentar cargar la página web, PHP lanza un error crítico indicando que no reconoce la función de conexión a la base de datos.
-Sucedio porque: Las imágenes oficiales de PHP en Docker vienen unicamente con lo necesario. No incluyen extensiones de bases de datos por defecto para optimizar el peso del contenedor.
-Mi solución: añadí la instrucción `docker-php-ext-install mysqli` en la sección `command` del servicio de PHP dentro del `docker-compose.yml` para compilar la extensión en tiempo real durante el arranque.
+#### Mi error:
+Al intentar cargar la página web, PHP lanza un error crítico indicando que no reconoce la función de conexión a la base de datos.
+#### Sucedio porque:
+Las imágenes oficiales de PHP en Docker vienen unicamente con lo necesario. No incluyen extensiones de bases de datos por defecto para optimizar el peso del contenedor.
+#### Mi solución:
+añadí la instrucción `docker-php-ext-install mysqli` en la sección `command` del servicio de PHP dentro del `docker-compose.yml` para compilar la extensión en tiempo real durante el arranque.
 
 ### 2. Error: `php_network_getaddresses: getaddrinfo for [Nombre] failed: Name or service not known`
 #### Mi error:
